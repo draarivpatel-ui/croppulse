@@ -706,8 +706,9 @@ function renderMethod() {
 function renderPrintSheet() {
   const s = t();
   const sheet = document.getElementById('print-sheet');
+  sheet.setAttribute('aria-label', s.printTitle);
   sheet.replaceChildren(
-    h('h1', 'print-title', s.printTitle),
+    h('p', 'print-title', s.printTitle),
     h('p', 'print-meta', s.printMeta(scenarioNames[lang()][input.scenario.id], new Date().toISOString())),
   );
   const table = tableEl('print-table');

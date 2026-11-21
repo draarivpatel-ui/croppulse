@@ -62,6 +62,23 @@ test('calendar UID and escaped summary cannot inject properties or a second even
   assert.equal(icsText('x\r\ny\rz\n;,\\\t'), 'x\\ny\\nz\\n\\;\\,\\\\');
 });
 
+test('calendar escaping strips universal newlines, C1 controls and lone surrogates', () => {
+  assert.equal(icsText('a\u2028b\u2029c\u0085d\u009f'), 'abcd');
+  assert.equal(icsText('x\ud800y\udfffz'), 'xyz');
+  const hostile = structuredClone(sample);
+  hostile.schedule[0].events[0].plot = 'A\u2028B\u0085C\ud800';
+  const output = scheduleICS(hostile, 'test', { stamp });
+  assert.doesNotMatch(output, /[\u2028\u2029\u0085-\u009f\ud800-\udfff]/u);
+});
+
+test('fractional seconds are rejected rather than truncated', () => {
+  const shifted = structuredClone(sample);
+  shifted.schedule[0].events[0].end = '2027-07-12T12:36:00.500Z';
+  assert.throws(() => scheduleICS(shifted, 'test', { stamp }), TypeError);
+  assert.throws(() => scheduleICS(sample, 'test', { stamp: '2026-11-21T03:04:05.500Z' }), TypeError);
+  assert.throws(() => scheduleICS(sample, 'test', { stamp: '2026-11-21T03:04:05.001Z' }), TypeError);
+});
+
 for (const length of [0, 72, 73, 74, 75, 76, 149, 207]) {
   test(`calendar folding preserves content at byte boundary ${length}`, () => {
     const input = 'a'.repeat(length) + '\u00f3\u{1f33e}tail'.repeat(20);

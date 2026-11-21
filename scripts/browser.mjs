@@ -236,6 +236,38 @@ async function main() {
         { type: 'mouseReleased', x: pt.x, y: pt.y, button: 'left', clickCount: 1 }, sessionId);
       await sleep(150);
     };
+    const contrast = () => ev(`(() => {
+      const parse = value => {
+        const v = value.trim();
+        const hex = /^#([0-9a-f]{6})$/i.exec(v);
+        if (hex) return [0, 2, 4].map(i => parseInt(hex[1].slice(i, i + 2), 16));
+        return v.match(/[\\d.]+/g).slice(0, 3).map(Number);
+      };
+      const lum = rgb => {
+        const c = parse(rgb).map(v => {
+          const s = v / 255;
+          return s <= 0.04045 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+        });
+        return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+      };
+      const ratio = (a, b) => {
+        const pair = [lum(a), lum(b)].sort((x, y) => y - x);
+        return (pair[0] + 0.05) / (pair[1] + 0.05);
+      };
+      const cs = getComputedStyle(document.documentElement);
+      const paper = cs.getPropertyValue('--paper');
+      const raised = cs.getPropertyValue('--paper-raised');
+      const rule = cs.getPropertyValue('--rule-strong');
+      const amber = cs.getPropertyValue('--amber');
+      return { rulePaper: ratio(rule, paper), ruleRaised: ratio(rule, raised),
+        amberPaper: ratio(amber, paper), amberRaised: ratio(amber, raised) };
+    })()`);
+    const checkContrast = theme => contrast().then(c => {
+      check(`${theme} rule-strong border contrast`, c.rulePaper >= 3 && c.ruleRaised >= 3,
+        `${c.rulePaper.toFixed(2)} paper / ${c.ruleRaised.toFixed(2)} raised`);
+      check(`${theme} amber label contrast`, c.amberPaper >= 4.5 && c.amberRaised >= 4.5,
+        `${c.amberPaper.toFixed(2)} paper / ${c.amberRaised.toFixed(2)} raised`);
+    });
 
     // ----- desktop pass -----
     await cdp.send('Emulation.setDeviceMetricsOverride',
@@ -300,6 +332,7 @@ async function main() {
     // real pointer: theme toggle engages the dark dataset and releases it
     await pointerClick('#theme');
     check('dark dataset set', await ev('document.documentElement.dataset.theme') === 'dark');
+    await checkContrast('dark');
     await pointerClick('#theme');
     check('theme released to light', await ev('document.documentElement.dataset.theme') === 'light');
 
@@ -310,10 +343,14 @@ async function main() {
     await ev('(() => { const s = document.getElementById("scenario"); s.value = "high-plains"; s.dispatchEvent(new Event("change", { bubbles: true })); })()');
     await sleep(250);
 
-    // print sheet content
+    // print sheet content and document outline
     check('print sheet covers seven days', await ev(
       'document.querySelectorAll("#print-sheet .print-table tbody tr").length') >= 7);
     check('print sheet shows UTC', /UTC/u.test(await ev('document.getElementById("print-sheet").textContent')));
+    check('single h1 heading', await ev('document.querySelectorAll("h1").length') === 1);
+    check('print sheet label localized en', await ev(
+      'document.getElementById("print-sheet").getAttribute("aria-label")') === 'Field schedule');
+    await checkContrast('light');
 
     // service worker
     const scope = await ev(
@@ -344,6 +381,8 @@ async function main() {
     await ev('(() => { const s = document.getElementById("scenario"); s.value = "terraces"; s.dispatchEvent(new Event("change", { bubbles: true })); })()');
     await ev('document.getElementById("language").click()');
     await sleep(150);
+    check('print sheet label localized es', await ev(
+      'document.getElementById("print-sheet").getAttribute("aria-label")') === 'Calendario de riego');
     await ev('(() => { const q = document.getElementById("quota"); q.value = "252"; q.dispatchEvent(new Event("input", { bubbles: true })); })()');
     await sleep(300);
     const pdf2 = await cdp.send('Page.printToPDF',

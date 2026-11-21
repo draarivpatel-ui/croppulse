@@ -59,8 +59,15 @@ const HEADERS = {
 
 export function startServer({ port = 4178, host = '127.0.0.1' } = {}) {
   const server = createServer(async (req, res) => {
+    let url;
     try {
-      const url = new URL(req.url, `http://${req.headers.host || '127.0.0.1'}`);
+      url = new URL(req.url, `http://${req.headers.host || '127.0.0.1'}`);
+    } catch {
+      res.writeHead(400, { ...HEADERS, 'Content-Type': 'text/plain; charset=utf-8' });
+      res.end('bad request');
+      return;
+    }
+    try {
       if (req.method !== 'GET' && req.method !== 'HEAD') {
         res.writeHead(405, { ...HEADERS, 'Content-Type': 'text/plain; charset=utf-8' });
         res.end('method not allowed');

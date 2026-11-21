@@ -199,7 +199,7 @@ function exhaustive(input) {
 for (const scenario of SCENARIOS) {
   for (const shock of [false, true]) {
     for (const days of [1, 3, 4]) {
-      for (const dailyLots of [1, 2]) {
+      for (const dailyLots of [0, 1, 2]) {
         for (const budgetLots of [0, 2, 5]) {
           test(`exact independent enumeration ${scenario.id} shock=${shock} days=${days} daily=${dailyLots} budget=${budgetLots}`, () => {
             const input = prepare(scenario.id, { shock, stages: shock ? STAGES : undefined });
@@ -292,12 +292,40 @@ test('stage edit changes crop demand and sensitivity but not rooting geometry', 
 
 test('invalid options and masks cannot create partial or nonfinite plans', () => {
   for (const opts of [{ quota: NaN }, { quota: -1 }, { quota: 379 }, { quota: '20' },
-    { shock: 0 }, { stages: [] }, { stages: Array(3) }, { stages: ['flower', 'fill', 'x'] }]) {
+    { shock: 0 }, { stages: [] }, { stages: Array(3) }, { stages: ['flower', 'fill', 'x'] },
+    null, 'x', 5, [], true]) {
     assert.throws(() => prepare('high-plains', opts), RangeError);
   }
   assert.throws(() => prepare('unknown'), RangeError);
   const input = prepare('terraces');
   for (const mask of [-1, 2 ** input.weather.length, NaN, 2.5]) {
     assert.throws(() => simulatePlot(input, 0, mask), RangeError);
+  }
+});
+
+test('a zero daily pump window yields a dry plan, and caps apply per day', () => {
+  const input = prepare('high-plains', { quota: 126 });
+  const dry = optimize({ ...input, dailyLots: 0 });
+  assert.equal(dry.lots, 0);
+  assert.equal(dry.water, 0);
+  assert.equal(dry.feasible, 1);
+  assert.ok(dry.schedule.every(day => day.events.length === 0));
+  for (const dailyLots of [1, 2, 3]) {
+    const plan = optimize({ ...input, dailyLots });
+    assert.ok(plan.schedule.every(day => day.events.length <= dailyLots));
+  }
+});
+
+test('optimize rejects malformed planner inputs with RangeError', () => {
+  const input = prepare('terraces');
+  for (const patch of [
+    { plots: input.plots.slice(0, 2) },
+    { plots: [...input.plots, input.plots[0]] },
+    { weather: [] },
+    { weather: Array(31).fill(input.weather[0]) },
+    { budgetLots: -1 }, { budgetLots: 1.5 }, { budgetLots: NaN }, { budgetLots: '4' },
+    { dailyLots: -1 }, { dailyLots: 0.5 }, { dailyLots: NaN }, { dailyLots: '2' },
+  ]) {
+    assert.throws(() => optimize({ ...input, ...patch }), RangeError);
   }
 });

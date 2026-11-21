@@ -17,6 +17,8 @@ Daily reference evapotranspiration for short grass uses FAO Irrigation and Drain
 
 FAO-56 Example 18 uses measurements from Uccle on 6 July. The input is `Tmin = 12.3`, `Tmax = 21.5`, `RHmin = 63`, `RHmax = 84`, `wind = 10 km/h at 10 m`, `latitude = 50.8`, `elevation = 100 m`, `J = 187` and `sunshine = 9.25 h`. The published result is 3.88 mm/day before the paper rounds it to 3.9. Tests check the result and thirteen published intermediate values at their printed precision.
 
+Two input paths are mutually exclusive: when an actual vapor pressure is supplied, the humidity fields are not consulted, and when a measured solar value is supplied, the sunshine field is not consulted. Under extreme heat and humidity, or with little sun, the humidity and cloud terms can push the unclipped estimate below zero; the raw value is still reported while the operational demand stays at zero. In polar night the cloud term falls back to zero, but a nonzero wind can still yield a small positive estimate through the aerodynamic term of the daily equation.
+
 ## Soil and crop response
 
 Available water in millimeters is `TAW = 1000 (theta_FC - theta_WP) Zr`. Readily available water is `RAW = p TAW`, with the FAO-56 daily crop demand correction `p = clamp(p_table + 0.04 (5 - ETc), 0.1, 0.8)`. Potential crop ET is `Kc ET0`. The single-coefficient stress approximation scales crop ET by `Ks`, evaluated after the day's morning wetting and drainage; uptake cannot exceed remaining available water.

@@ -9,6 +9,9 @@ const popcount = n => {
 };
 
 export function prepare(scenarioId, options = {}) {
+  if (options === null || typeof options !== 'object' || Array.isArray(options)) {
+    throw new RangeError('invalid options');
+  }
   const scenario = SCENARIOS.find(item => item.id === scenarioId);
   if (!scenario) throw new RangeError('unknown scenario');
   const { quota = scenario.quota, shock = false, stages = scenario.plots.map(p => p.stage) } = options;
@@ -116,6 +119,12 @@ export function calendarBaseline(input) {
 // Exact for three plots, at most one fixed-volume pulse per plot per day.
 // After precomputing per-plot trajectories the only cross-plot coupling is feasibility.
 export function optimize(input) {
+  if (!input || !Array.isArray(input.plots) || input.plots.length !== 3 ||
+      !Array.isArray(input.weather) || input.weather.length < 1 || input.weather.length > 30 ||
+      !Number.isInteger(input.budgetLots) || input.budgetLots < 0 ||
+      !Number.isInteger(input.dailyLots) || input.dailyLots < 0) {
+    throw new RangeError('invalid optimization input');
+  }
   const variants = input.plots.map((_, index) =>
     Array.from({ length: 2 ** input.weather.length }, (_, mask) => simulatePlot(input, index, mask))
       .filter(plot => plot.lots <= input.budgetLots));
@@ -127,13 +136,17 @@ export function optimize(input) {
   for (const a of aOptions) {
     for (const b of bOptions) {
       const shared = a.mask & b.mask;
+      const union = a.mask | b.mask;
       const subtotal = a.lots + b.lots;
-      if (subtotal > input.budgetLots || (input.dailyLots === 1 && shared)) continue;
+      if (subtotal > input.budgetLots ||
+          (input.dailyLots < 1 && union) ||
+          (input.dailyLots === 1 && shared)) continue;
       for (const c of cOptions) {
         const lots = subtotal + c.lots;
         if (lots > input.budgetLots ||
-            (input.dailyLots === 1 && ((a.mask | b.mask) & c.mask)) ||
-            (input.dailyLots === 2 && (shared & c.mask))) continue;
+            (input.dailyLots < 1 && (union | c.mask)) ||
+            (input.dailyLots < 2 && (shared | (union & c.mask))) ||
+            (input.dailyLots < 3 && (shared & c.mask))) continue;
         feasible++;
         const score = a.calories + b.calories + c.calories;
         if (score > bestScore || (score === bestScore && lots < bestLots)) {
@@ -144,6 +157,7 @@ export function optimize(input) {
       }
     }
   }
+  if (!best) throw new RangeError('no feasible schedule');
   return { ...summarize(input, best), feasible };
 }
 

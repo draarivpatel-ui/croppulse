@@ -25,9 +25,12 @@ export function scheduleCSV(result) {
   return rows.map(row => row.map(csvCell).join(',')).join(crlf) + crlf;
 }
 
+const stripUnsafe = value => String(value)
+  .replace(/[\u0000-\u001f\u007f-\u009f\u2028\u2029\ud800-\udfff]/gu, '');
+
 export function icsText(value) {
-  return String(value).replaceAll('\\', '\\\\').replace(/\r\n|\r|\n/gu, '\\n')
-    .replaceAll(';', '\\;').replaceAll(',', '\\,').replace(/[\u0000-\u001f\u007f]/gu, '');
+  return stripUnsafe(String(value).replaceAll('\\', '\\\\').replace(/\r\n|\r|\n/gu, '\\n')
+    .replaceAll(';', '\\;').replaceAll(',', '\\,'));
 }
 
 export function foldLine(line) {
@@ -51,6 +54,9 @@ function icalDate(value) {
   if (typeof value !== 'string' || !/^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d(?:\.\d{3})?Z$/u.test(value)) {
     throw new TypeError('expected UTC date and time');
   }
+  if (value.includes('.') && !value.endsWith('.000Z')) {
+    throw new TypeError('fractional seconds are not supported');
+  }
   const normalized = value.includes('.') ? value : value.replace('Z', '.000Z');
   const date = new Date(normalized);
   if (!Number.isFinite(date.valueOf()) || date.toISOString() !== normalized) {
@@ -59,7 +65,8 @@ function icalDate(value) {
   return normalized.replace(/[-:]|\.\d{3}/gu, '');
 }
 
-export function scheduleICS(result, scenarioId, { stamp = new Date().toISOString(), es = false } = {}) {
+export function scheduleICS(result, scenarioId,
+  { stamp = new Date().toISOString().replace(/\.\d{3}Z$/u, 'Z'), es = false } = {}) {
   const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//CropPulse//Field Schedule 1.0//EN',
     'CALSCALE:GREGORIAN'];
   const timestamp = icalDate(stamp);
@@ -68,7 +75,7 @@ export function scheduleICS(result, scenarioId, { stamp = new Date().toISOString
       const start = icalDate(event.start);
       const end = icalDate(event.end);
       if (end <= start) throw new RangeError('event must end after it starts');
-      const key = encodeURIComponent(`${scenarioId}/${event.plot}/${start}`);
+      const key = encodeURIComponent(stripUnsafe(`${scenarioId}/${event.plot}/${start}`));
       const summary = es ? `Riego de parcela ${event.plot}` : `Irrigate plot ${event.plot}`;
       const notes = es ? `${event.volume} m3. Plan simulado, no una recomendaci\u00f3n.` :
         `${event.volume} m3. Simulated plan, not a recommendation.`;

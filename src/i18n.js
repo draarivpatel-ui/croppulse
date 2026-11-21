@@ -109,7 +109,6 @@ export const T = {
 
     plotsTitle: 'Plots',
     plotWord: 'Plot',
-    plotButton: (id, crop) => `Show plot ${id}, ${crop}, in the main figure`,
     plotArea: (m2) => `${m2} m2`,
     plotYield: 'yield',
     plotCrit: 'critical days',
@@ -225,7 +224,6 @@ export const T = {
 
     plotsTitle: 'Parcelas',
     plotWord: 'Parcela',
-    plotButton: (id, crop) => `Mostrar la parcela ${id}, ${crop}, en la figura principal`,
     plotArea: (m2) => `${m2} m2`,
     plotYield: 'rendimiento',
     plotCrit: 'días críticos',
