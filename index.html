@@ -1,0 +1,20 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CropPulse - Irrigation workbench</title>
+<meta name="description" content="CropPulse irrigation workbench: a simulated weekly pump schedule compared against a fixed calendar on synthetic data.">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self'; worker-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="stylesheet" href="./styles.css">
+<script type="module" src="./src/ui.js"></script>
+</head>
+<body>
+<a class="skip" href="#main">Skip to workbench</a>
+<header class="topbar"><a class="wordmark" href="./">CropPulse</a><nav aria-label="Workbench actions"><a href="#schedule" id="schedule-link">Field schedule</a><button type="button" id="language">Español</button><button type="button" id="theme" aria-pressed="false">Dark</button></nav></header>
+<main id="main"><h1 id="page-title">Irrigation workbench</h1><div class="workspace"><aside id="controls"></aside><section id="analysis"></section></div><section id="schedule" tabindex="-1"></section><section id="method"></section></main>
+<section id="print-sheet" aria-label="Printable field schedule"></section>
+</body>
+</html>

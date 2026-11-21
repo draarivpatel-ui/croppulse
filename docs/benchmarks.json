@@ -1,0 +1,141 @@
+{
+  "synthetic": true,
+  "uccleET0": 3.880259447114006,
+  "scenarios": [
+    {
+      "id": "high-plains",
+      "quota": 126,
+      "shock": false,
+      "baseline": {
+        "water": 126,
+        "kg": 614.8804447285069,
+        "calorieIndex": 0.352127674285953,
+        "valueIndex": 0.3949721983923236,
+        "yieldIndex": 0.37078963078363797,
+        "criticalDays": 0
+      },
+      "optimized": {
+        "water": 126,
+        "kg": 896.250430748968,
+        "calorieIndex": 0.5325346190684437,
+        "valueIndex": 0.5040018651522962,
+        "yieldIndex": 0.540463384640275,
+        "criticalDays": 0
+      },
+      "waterSaved": 0,
+      "waterSavedPct": 0,
+      "yieldLossAvoidedPoints": 16.9673753856637,
+      "calorieGainPoints": 18.04069447824907,
+      "criticalDaysAvoided": 0,
+      "feasibleSchedules": 170440
+    },
+    {
+      "id": "cooperative",
+      "quota": 144,
+      "shock": false,
+      "baseline": {
+        "water": 144,
+        "kg": 5968.465641586049,
+        "calorieIndex": 0.6213657022611813,
+        "valueIndex": 0.9410013003929902,
+        "yieldIndex": 0.9052044652439598,
+        "criticalDays": 0
+      },
+      "optimized": {
+        "water": 144,
+        "kg": 6259.942269286231,
+        "calorieIndex": 0.9151943793039214,
+        "valueIndex": 0.9537264341452703,
+        "yieldIndex": 0.9494111275174385,
+        "criticalDays": 0
+      },
+      "waterSaved": 0,
+      "waterSavedPct": 0,
+      "yieldLossAvoidedPoints": 4.420666227347869,
+      "calorieGainPoints": 29.38286770427402,
+      "criticalDaysAvoided": 0,
+      "feasibleSchedules": 316159
+    },
+    {
+      "id": "terraces",
+      "quota": 144,
+      "shock": false,
+      "baseline": {
+        "water": 144,
+        "kg": 923.8082319659588,
+        "calorieIndex": 0.8349894358386715,
+        "valueIndex": 0.8234795846703317,
+        "yieldIndex": 0.8348167648345914,
+        "criticalDays": 0
+      },
+      "optimized": {
+        "water": 108,
+        "kg": 1055.3945632382488,
+        "calorieIndex": 0.9537427988401034,
+        "valueIndex": 0.9514325430075244,
+        "yieldIndex": 0.9537272395068217,
+        "criticalDays": 0
+      },
+      "waterSaved": 36,
+      "waterSavedPct": 25,
+      "yieldLossAvoidedPoints": 11.891047467223025,
+      "calorieGainPoints": 11.875336300143191,
+      "criticalDaysAvoided": 0,
+      "feasibleSchedules": 316159
+    },
+    {
+      "id": "high-plains",
+      "quota": 36,
+      "shock": true,
+      "baseline": {
+        "water": 36,
+        "kg": 445.6031202788518,
+        "calorieIndex": 0.2513881745598319,
+        "valueIndex": 0.23355329458926127,
+        "yieldIndex": 0.26871080038524503,
+        "criticalDays": 5
+      },
+      "optimized": {
+        "water": 36,
+        "kg": 482.07716048608296,
+        "calorieIndex": 0.2732677080771362,
+        "valueIndex": 0.34980306699452146,
+        "yieldIndex": 0.2907056385974088,
+        "criticalDays": 1
+      },
+      "waterSaved": 0,
+      "waterSavedPct": 0,
+      "yieldLossAvoidedPoints": 2.1994838212163748,
+      "calorieGainPoints": 2.1879533517304264,
+      "criticalDaysAvoided": 4,
+      "feasibleSchedules": 232
+    },
+    {
+      "id": "high-plains",
+      "quota": 72,
+      "shock": true,
+      "baseline": {
+        "water": 72,
+        "kg": 499.34204363191975,
+        "calorieIndex": 0.28226893098376316,
+        "valueIndex": 0.3037608561158834,
+        "yieldIndex": 0.3011168326792015,
+        "criticalDays": 0
+      },
+      "optimized": {
+        "water": 72,
+        "kg": 652.4825620291061,
+        "calorieIndex": 0.3828422098007881,
+        "valueIndex": 0.3262519336380838,
+        "yieldIndex": 0.39346473016288136,
+        "criticalDays": 5
+      },
+      "waterSaved": 0,
+      "waterSavedPct": 0,
+      "yieldLossAvoidedPoints": 9.234789748367989,
+      "calorieGainPoints": 10.057327881702493,
+      "criticalDaysAvoided": -5,
+      "feasibleSchedules": 7414
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "croppulse",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Simulated irrigation workbench: optimized weekly pump pulses versus a fixed calendar on synthetic data.",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node scripts/serve.mjs",
+    "test": "node --test tests/*.test.js",
+    "test:browser": "node scripts/browser.mjs"
+  }
+}
