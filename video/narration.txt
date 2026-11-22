@@ -1,0 +1,11 @@
+CropPulse is an irrigation workbench that compares a fixed watering calendar with an optimized pump schedule on three synthetic smallholder farms. It tracks each root zone daily while an exact search maximizes modeled calories inside the weekly quota and pump limits. The data is synthetic, the page runs in English and Spanish and works offline once loaded. All 480 tests pass.
+
+The default scenario is a synthetic drought week on the Texas High Plains. The settings set the weekly quota, a heat spell shock and each plot's growth stage. On the default 126 cubic meter quota, the optimized plan pumps the same 126 cubic meters while the modeled calorie index climbs 18.0 points.
+
+The chart tracks root zone depletion against the fixed calendar, with irrigation pulses and a 90 percent stress line. The plot cards switch crops, and the day balance shows evapotranspiration, rain, runoff and percolation.
+
+Switch the scenario to the monsoon delay terraces and the tradeoff shifts. The optimized plan uses 108 cubic meters instead of 144, a 25 percent cut, and still raises the calorie index by 11.9 points. Calorie maximization is not minimizing stressed days, and the outcomes stay separate.
+
+On the High Plains, enable the heat spell and slide the quota to 36 cubic meters. The calendar logs five critical plot days while the optimized plan logs one. At 72 cubic meters the calorie gain grows to 10.1 points, but the optimized schedule logs five more critical plot days than the calendar.
+
+The field schedule lists every pump pulse in UTC beside print, CSV, calendar and audit JSON downloads. The method section names FAO 56 evapotranspiration and FAO 33 yield response on synthetic weather with no agronomist review. It is a teaching model, not advice for a real field. CropPulse. See what one more pump slot is worth.

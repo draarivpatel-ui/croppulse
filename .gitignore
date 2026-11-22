@@ -2,3 +2,5 @@ node_modules/
 .browser-profile-*/
 .DS_Store
 *.log
+video/*.wav
+video/*.mp4
