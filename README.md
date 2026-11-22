@@ -2,6 +2,8 @@
 
 CropPulse compares two ways to share a limited irrigation supply among three plots in a seven-day synthetic weather window. It calculates daily atmospheric water demand, updates each root-zone water balance, and searches the full set of schedules allowed by a shared pump. No account, backend, field telemetry, or live weather service is used.
 
+**Live demo:** [https://aariv.me/croppulse/](https://aariv.me/croppulse/)
+
 ## Run locally
 
 Use Node 22 or later. Nothing needs to be installed.
