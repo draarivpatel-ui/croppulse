@@ -542,6 +542,166 @@ details.chart-data .table-scroll { margin-top: 0.5rem; }
   line-height: 1.65;
 }
 
+/* ---------- quota and stress lab ---------- */
+
+#quota-lab {
+  margin-top: 3rem;
+  padding-top: 2.4rem;
+  border-top: 2px solid var(--rule-strong);
+}
+#quota-lab .section-title { margin-bottom: 1rem; }
+
+.lab-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 0 1.6rem;
+  margin-bottom: 1.6rem;
+}
+.lab-controls .group {
+  border-top: 1px solid var(--rule);
+  padding: 0.9rem 0 1rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.lab-sub {
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  margin: 0 0 0.7rem;
+}
+
+.lab-comp { margin-bottom: 1.8rem; }
+.comp-table .pick {
+  font: inherit;
+  font-weight: 600;
+  color: var(--forest-deep);
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.comp-table .pick:hover { text-decoration: underline; text-underline-offset: 3px; }
+.comp-table .pick-sel { font-weight: 400; color: var(--ink-soft); font-size: 0.78rem; }
+.comp-table tr.sel th, .comp-table tr.sel td { background: var(--forest-fill); }
+
+.lab-figure { margin: 0 0 1.6rem; }
+.labchart { display: block; width: 100%; height: auto; }
+.labchart .tick {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  fill: var(--ink-soft);
+}
+.labchart .tick.x.sub { font-size: 9px; }
+.labchart .axis-name {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  letter-spacing: 0.04em;
+  fill: var(--ink-soft);
+}
+.labchart .grid { stroke: var(--grid); stroke-width: 1; }
+.labchart .vgrid { stroke: var(--grid); stroke-width: 0.7; }
+.labchart .line-opt { stroke: var(--forest); stroke-width: 2.6; stroke-linejoin: round; stroke-linecap: round; }
+.labchart .line-cal { stroke: var(--terra); stroke-width: 2; stroke-dasharray: 7 5; stroke-linejoin: round; stroke-linecap: round; }
+.labchart .raw { stroke: var(--amber); stroke-width: 1.4; stroke-dasharray: 2.5 4; }
+.labchart .crit { stroke: var(--crit); stroke-width: 1.2; stroke-dasharray: 8 4; }
+.labchart .mark { stroke: var(--amber); stroke-width: 1.3; stroke-dasharray: 5 4; }
+.labchart .ref-label {
+  font-family: var(--font-ui);
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--ink-soft);
+}
+.labchart .crit-label { fill: var(--crit); }
+.labchart .mark-label { fill: var(--amber); }
+.labchart .cliff-label { fill: var(--crit); }
+.labchart .cliff { fill: var(--crit); }
+.labchart .sq-cal { fill: none; stroke: var(--terra); stroke-width: 1.4; }
+.labchart .crit-area { fill: var(--forest-fill); stroke: var(--forest); stroke-width: 1; stroke-dasharray: 3 3; opacity: 0.9; }
+.labchart .qdot {
+  fill: var(--forest);
+  stroke: var(--paper-raised);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+.labchart .qdot:hover, .labchart .eday:hover { stroke: var(--forest-deep); stroke-width: 2.5; }
+.labchart .qdot:focus-visible, .labchart .eday:focus-visible {
+  outline: none;
+  stroke: var(--focus);
+  stroke-width: 3;
+}
+.labchart .env-band { fill: var(--band); }
+.labchart .env-line { stroke-linejoin: round; stroke-linecap: round; }
+.labchart .env-line.line-a { stroke: var(--forest); stroke-width: 2.2; }
+.labchart .env-line.line-b { stroke: var(--forest); stroke-width: 1.8; stroke-dasharray: 7 4; }
+.labchart .env-line.line-c { stroke: var(--terra); stroke-width: 1.8; stroke-dasharray: 2 3; }
+.labchart .env-line.insp { stroke-width: 3.4; }
+.labchart .eday {
+  fill: var(--forest);
+  stroke: var(--paper-raised);
+  stroke-width: 1.5;
+  cursor: pointer;
+}
+.labchart .eday.sel { stroke: var(--forest-deep); stroke-width: 2.5; }
+.labchart .end-label {
+  font-family: var(--font-ui);
+  font-size: 10.5px;
+  font-weight: 700;
+  fill: var(--ink);
+}
+.swatch.env-a line { stroke: var(--forest); stroke-width: 2.2; }
+.swatch.env-b line { stroke: var(--forest); stroke-width: 1.8; stroke-dasharray: 7 4; }
+.swatch.env-c line { stroke: var(--terra); stroke-width: 1.8; stroke-dasharray: 2 3; }
+.swatch.crit rect { fill: var(--forest-fill); stroke: var(--forest); stroke-width: 1; stroke-dasharray: 2 2; }
+.swatch.cliffm path { fill: var(--crit); }
+
+.lab-export { margin: 0 0 1.6rem; }
+.fingerprint {
+  display: flex;
+  align-items: baseline;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  margin: 0.4rem 0 0.7rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+}
+.fingerprint .digest {
+  font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  font-size: 0.78rem;
+  color: var(--forest-deep);
+  word-break: break-all;
+}
+.share-wrap { max-width: 34rem; }
+.share-wrap .field-label { margin-bottom: 0.3rem; }
+
+.checks-body { margin-top: 0.6rem; }
+.checks-status { margin: 0.6rem 0 0.4rem; }
+.check-list {
+  list-style: none;
+  margin: 0.4rem 0 0;
+  padding: 0;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  columns: 2;
+  column-gap: 2rem;
+}
+.check-list li {
+  border-top: 1px solid var(--rule);
+  padding: 0.28rem 0;
+  color: var(--ink-soft);
+  break-inside: avoid;
+}
+.check-list li.pass { color: var(--good); }
+.check-list li.fail { color: var(--bad); font-weight: 600; }
+.lab-day-status { margin-top: 0.5rem; }
+
+@media (max-width: 640px) {
+  .check-list { columns: 1; }
+}
+
 /* ---------- print sheet ---------- */
 
 #print-sheet { display: none; }

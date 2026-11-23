@@ -34,6 +34,8 @@ const ALLOWED = new Map([
   ['/src/scenarios.js', 'src/scenarios.js'],
   ['/src/planner.js', 'src/planner.js'],
   ['/src/exports.js', 'src/exports.js'],
+  ['/src/quota-lab.js', 'src/quota-lab.js'],
+  ['/src/quota-lab-ui.js', 'src/quota-lab-ui.js'],
 ]);
 
 const CSP = [

@@ -6,7 +6,7 @@
 const SCOPE_PATH = new URL('./', self.location.href).pathname;
 const INDEX_URL = new URL('./', self.location.href).href;
 const PREFIX = `croppulse:${SCOPE_PATH}:`;
-const CACHE = `${PREFIX}v2`;
+const CACHE = `${PREFIX}v3`;
 
 const SHELL = [
   './',
@@ -19,6 +19,8 @@ const SHELL = [
   'src/scenarios.js',
   'src/planner.js',
   'src/exports.js',
+  'src/quota-lab.js',
+  'src/quota-lab-ui.js',
 ];
 
 const SHELL_URLS = new Set(SHELL.map(path => new URL(path, self.location.href).href));

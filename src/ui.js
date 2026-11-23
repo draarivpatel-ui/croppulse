@@ -801,6 +801,7 @@ function wire() {
     try { localStorage.setItem('croppulse-lang', state.es ? 'es' : 'en'); } catch { /* private mode */ }
     localize();
     render();
+    document.dispatchEvent(new CustomEvent('croppulse:language', { detail: { es: state.es } }));
   });
   els.themeBtn.addEventListener('click', () => {
     dark = !dark;
@@ -877,6 +878,10 @@ function init() {
   build();
   localize();
   refresh();
+  const labSection = document.getElementById('quota-lab');
+  if (labSection) {
+    import('./quota-lab-ui.js').then(module => module.mountLab(labSection)).catch(() => {});
+  }
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register(new URL('../sw.js', import.meta.url)).catch(() => {});
