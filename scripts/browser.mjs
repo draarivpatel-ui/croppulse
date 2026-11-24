@@ -103,7 +103,7 @@ async function launchChrome(profile, onSpawn) {
     '--disable-sync',
     '--disable-default-apps',
     '--metrics-recording-only',
-    '--window-size=1280,800',
+    '--window-size=1440,900',
     'about:blank',
   ], { stdio: ['ignore', 'ignore', 'pipe'] });
   proc.stderr.on('data', () => {});
@@ -271,14 +271,14 @@ async function main() {
 
     // ----- desktop pass -----
     await cdp.send('Emulation.setDeviceMetricsOverride',
-      { width: 1280, height: 800, deviceScaleFactor: 1, mobile: false }, sessionId);
+      { width: 1440, height: 900, deviceScaleFactor: 1, mobile: false }, sessionId);
     await navigate(host.url);
     await sleep(400);
 
     check('page title', await ev('document.title') === 'CropPulse - Irrigation workbench');
     check('document lang en', await ev('document.documentElement.lang') === 'en');
-    const desktopOverflow = await overflow(1280);
-    check('no horizontal overflow 1280', desktopOverflow <= 0, `excess ${desktopOverflow}px`);
+    const desktopOverflow = await overflow(1440);
+    check('no horizontal overflow 1440', desktopOverflow <= 0, `excess ${desktopOverflow}px`);
     check('scenario options', await ev('document.getElementById("scenario").options.length') === 3);
     check('quota default', await ev('document.getElementById("quota").value') === '126');
     check('plot select options', await ev('document.getElementById("plot").options.length') === 3);

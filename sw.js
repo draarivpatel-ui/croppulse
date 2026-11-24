@@ -1,7 +1,7 @@
 // CropPulse service worker. Precaches the app shell under this worker's scope
 // so the workbench keeps working offline. Same-origin GET requests only; it
-// never calls out to any external service. Bump the cache version (v2) when
-// shipping changes so a mixed-version shell never serves.
+// never calls out to any external service. Bump the cache version when shipping
+// changes so a mixed-version shell never serves.
 
 const SCOPE_PATH = new URL('./', self.location.href).pathname;
 const INDEX_URL = new URL('./', self.location.href).href;
