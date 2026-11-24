@@ -71,6 +71,7 @@ export function mountLab(section) {
     return cachedSweep;
   };
   const selectedRun = () => comparison().strategies.find(run => run.id === state.strategy);
+  const invalidateIntegrity = () => { els.integrity.dataset.key = 'labVerifyIdle'; };
 
   // ---------- build ----------
 
@@ -617,10 +618,26 @@ export function mountLab(section) {
 
   function mutate(patch) {
     Object.assign(state, patch);
-    els.integrity.dataset.key = 'labVerifyIdle';
+    invalidateIntegrity();
     selDay = Math.min(selDay, input().weather.length - 1);
     writeHash();
     renderAll();
+  }
+
+  function selectQuota(quota) {
+    state.quota = quota;
+    invalidateIntegrity();
+    writeHash();
+    renderAll();
+    [...els.qchart.querySelectorAll('circle.qdot')]
+      .find(el => el.dataset.quota === String(quota))?.focus();
+  }
+
+  function selectDay(day) {
+    selDay = day;
+    renderEnvelope();
+    [...els.echart.querySelectorAll('circle.eday')]
+      .find(el => el.dataset.day === String(day))?.focus();
   }
 
   // ---------- events ----------
@@ -630,12 +647,14 @@ export function mountLab(section) {
       const scenario = labScenario(els.case.value);
       Object.assign(state, { case: scenario.id, quota: scenario.quota, plot: 0 });
       selDay = 0;
+      invalidateIntegrity();
       writeHash();
       renderAll();
     });
     let quotaRaf = 0;
     els.quota.addEventListener('input', () => {
       state.quota = Number(els.quota.value);
+      invalidateIntegrity();
       writeHash();
       if (!quotaRaf) {
         quotaRaf = requestAnimationFrame(() => { quotaRaf = 0; renderAll(); });
@@ -661,20 +680,14 @@ export function mountLab(section) {
     });
     els.qchart.addEventListener('click', event => {
       const dot = event.target.closest('circle.qdot');
-      if (dot) {
-        state.quota = Number(dot.dataset.quota);
-        writeHash();
-        renderAll();
-      }
+      if (dot) selectQuota(Number(dot.dataset.quota));
     });
     els.qchart.addEventListener('keydown', event => {
       const dot = event.target.closest('circle.qdot');
       if (!dot) return;
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        state.quota = Number(dot.dataset.quota);
-        writeHash();
-        renderAll();
+        selectQuota(Number(dot.dataset.quota));
       } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         event.preventDefault();
         const dots = [...els.qchart.querySelectorAll('circle.qdot')];
@@ -684,18 +697,14 @@ export function mountLab(section) {
     });
     els.echart.addEventListener('click', event => {
       const dot = event.target.closest('circle.eday');
-      if (dot) {
-        selDay = Number(dot.dataset.day);
-        renderEnvelope();
-      }
+      if (dot) selectDay(Number(dot.dataset.day));
     });
     els.echart.addEventListener('keydown', event => {
       const dot = event.target.closest('circle.eday');
       if (!dot) return;
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
-        selDay = Number(dot.dataset.day);
-        renderEnvelope();
+        selectDay(Number(dot.dataset.day));
       } else if (event.key === 'ArrowLeft' || event.key === 'ArrowRight') {
         event.preventDefault();
         const dots = [...els.echart.querySelectorAll('circle.eday')];

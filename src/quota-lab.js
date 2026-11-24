@@ -354,7 +354,8 @@ function b64urlDecode(text) {
     if (width >= 3) values.push((n >> 8) & 255);
     if (width === 4) values.push(n & 255);
   }
-  return new Uint8Array(values);
+  const bytes = new Uint8Array(values);
+  return b64urlEncode(bytes) === text ? bytes : null;
 }
 
 export function encodeState(state) {

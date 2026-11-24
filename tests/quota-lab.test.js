@@ -155,6 +155,16 @@ test('decodeState rejects a __proto__ key payload', () => {
   assert.equal(decodeState(hash), null);
 });
 
+test('decodeState rejects non-canonical base64url trailing bits', () => {
+  const canonical = encodeState({ v: 1, case: 'high-plains', quota: 0, shock: false,
+    strategy: 'fixed-calendar', plot: 0 });
+  assert.equal(canonical.at(-1), '0');
+  for (const last of ['1', '2', '3']) {
+    assert.equal(decodeState(`${canonical.slice(0, -1)}${last}`), null);
+  }
+  assert.notEqual(decodeState(canonical), null);
+});
+
 for (const bad of [
   'cp=', 'cp=!!!', 'cp=AAAA!', 'cp=A', 'cp=eyJ2IjoxfQ==', '#cp', 'cp',
   'cp=eyJ2IjoxfQ==extra', 'cp=%%%%', 'cp=not-base64-at-all!!',
