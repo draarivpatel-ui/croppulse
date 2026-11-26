@@ -28,7 +28,7 @@ The optimized plan maximizes modeled food calories under the stated constraints.
 
 The audit separates a SHA-256 integrity check from a model replay. The hash is not a signature and does not identify an author. Use the on-page checker or the command above. Calendar events use UTC and contain 15-minute display reminders; their dates belong to the simulation, not a real farm schedule.
 
-Verified on this checkout: `npm test` runs 1256 Node tests with 0 failures, `npm run test:browser` runs 49 headless Chromium checks with 0 failures, and the lab's in-page self-test runner reports 23/23 deterministic checks passing, including SHA-256 known-answer tests, pump-ceiling and quota conservation across all five strategies, calorie-optimal dominance over the fixed calendar, and bookmark-hash round trips.
+Verified on this checkout: `npm test` runs 1258 Node tests with 0 failures, `npm run test:browser` runs 49 headless Chromium checks with 0 failures, and the lab's in-page self-test runner reports 23/23 deterministic checks passing, including SHA-256 known-answer tests, pump-ceiling and quota conservation across all five strategies, calorie-optimal dominance over the fixed calendar, and bookmark-hash round trips.
 
 See [methods and limits](docs/methods.md) for equations, references, and model assumptions.
 
