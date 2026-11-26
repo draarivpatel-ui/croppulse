@@ -22,6 +22,7 @@ const state = {
 let input;
 let comparison;
 let dark = false;
+let auditSerial = 0;
 const els = {};
 const sig = {};
 
@@ -753,7 +754,19 @@ function render() {
   announce();
 }
 
+// Any edit to the model makes a previously uploaded audit stale, so the
+// verification line must fall back to its "choose a file" state.
+function clearAudit() {
+  auditSerial += 1;
+  if (!els.auditStatus) return;
+  els.auditStatus.dataset.state = 'idle';
+  els.auditStatus.dataset.key = 'auditChoose';
+  els.auditStatus.textContent = t().auditChoose;
+  if (els.auditFile) els.auditFile.value = '';
+}
+
 function refresh() {
+  clearAudit();
   solve();
   render();
 }
@@ -839,6 +852,7 @@ function wire() {
     const file = els.auditFile.files && els.auditFile.files[0];
     if (!file) { setStatus('auditChoose', 'idle'); return; }
     if (file.size > AUDIT_MAX_BYTES) { setStatus('auditTooBig', 'bad'); return; }
+    const serial = auditSerial;
     let bundle;
     try {
       bundle = JSON.parse(await file.text());
@@ -848,11 +862,12 @@ function wire() {
     }
     try {
       const result = await verifyAudit(bundle);
+      if (serial !== auditSerial) return;
       if (result.digestValid && result.replayValid) setStatus('auditOk', 'good');
       else if (result.digestValid) setStatus('auditDigestOnly', 'warn');
       else setStatus('auditFail', 'bad');
     } catch {
-      setStatus('auditFail', 'bad');
+      if (serial === auditSerial) setStatus('auditFail', 'bad');
     }
   });
   window.addEventListener('beforeprint', renderPrintSheet);
